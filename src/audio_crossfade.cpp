@@ -3,6 +3,11 @@
 #include <iostream>
 #include <vector>
 
+struct AACFileHeader
+{
+
+};
+
 bool verify_arguments(std::vector<std::string> arguments)
 {
   if (arguments.size() != 3) {
