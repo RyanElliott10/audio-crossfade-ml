@@ -1,3 +1,11 @@
+//
+//  audio_crossfade.cpp
+//  AudioCrossfadeML
+//
+//  Created by Ryan Elliott on 3/28/19.
+//  Copyright © 2019 Ryan Elliott. All rights reserved.
+//
+
 #include <string>
 #include <stdio.h>
 #include <iostream>
