@@ -1,4 +1,4 @@
-# audio-crossfade-ml
+# AudioCrossfadeML
 A tool to effectively -- and smoothly -- crossfade audio
 
 ## Running
