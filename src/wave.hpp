@@ -14,18 +14,15 @@
 class Wave
 {
 public:
-  // Functions
   Wave();
   ~Wave();
   void parse_header(const char *filename);
   void print_header_contents();
   
 private:
-  // Functions
   void init_header();
   void parse_read_byte_for_header(u_int32_t read_byte, std::string &current_string, int count);
   
-  // Variables
   struct _header_template {
     std::string riff;          // 0-3
     u_int32_t   file_size;     // 4-7
@@ -36,7 +33,6 @@ private:
     short       num_channels;  // 22-23
   };
   struct _header_template _header;
-
 };
 
 #endif /* wave_hpp */

@@ -22,7 +22,7 @@ Wave::Wave()
 
 Wave::~Wave()
 {
-    // No allocs or pointers
+  // No allocs or pointers
 }
 
 void Wave::init_header()
