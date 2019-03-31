@@ -24,19 +24,6 @@ void verify_arguments(const std::vector<std::string> arguments)
   }
 }
 
-void get_file_data(const char *filename, std::vector<char> &file_contents)
-{
-  FILE *fd = fopen(filename, "r");
-  unsigned char read_byte;
-
-  while ((char) (read_byte = getc(fd)) != EOF) {
-    #if defined(DEBUG)
-    std::cout << std::hex << read_byte << std::endl;
-    #endif
-    file_contents.push_back(read_byte);
-  }
-}
-
 int main(int argc, char *argv[])
 {
   std::vector<std::string> arguments;
@@ -49,8 +36,7 @@ int main(int argc, char *argv[])
   #endif
 
   Wave wave_file;
-  wave_file.parse_header(argv[1]);
+  wave_file.parse_header(arguments[1].c_str());
   
-
   return 0;
 }

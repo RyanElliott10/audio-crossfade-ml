@@ -1,5 +1,5 @@
 CC = clang++
-CXXFLAGS = -pedantic -Wall -Werror -std=c++11 -DDEBUG
+CXXFLAGS = -Wall -Werror -std=c++11 -DDEBUG
 OBJS = main.o wave.o
 MAIN = audio_crossfade
 
