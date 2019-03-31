@@ -44,9 +44,6 @@ void Wave::parse_header(const char *filename)
   }
 
   while ((u_int32_t) (read_byte = getc(fd)) != EOF && count < 44) {
-    // #if defined(DEBUG)
-    // std::cout << std::hex << read_byte << std::endl;
-    // #endif
     current_string.push_back(read_byte);
     parse_read_byte_for_header(read_byte, current_string, count);
     count++;

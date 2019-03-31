@@ -1,7 +1,12 @@
 CC = clang++
-CXXFLAGS = -Wall -Werror -std=c++11 -DDEBUG
+CXXFLAGS = -Wall -Werror -std=c++11
 OBJS = audio_crossfade.o wave.o
 MAIN = audio_crossfade
+
+all: audio_crossfade
+
+debug: CXXFLAGS += -DDEBUG
+debug: audio_crossfade
 
 audio_crossfade : $(OBJS)
 	$(CC) $(OBJS) $(BFLAGS) -o $(MAIN)
