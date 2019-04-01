@@ -27,6 +27,6 @@ Right now, I'm thinking the file/data/bit processing and everything should be do
     
     
 ### Rough Outline
-* ~Read contents of a given audio track through the command line~
-* ~Parse file headers (only supports `.wav` files right now)~
-* Jump to location in file given by timestamps, and perform audio processing
+[x] Read contents of a given audio track through the command line
+[x] Parse file headers (only supports `.wav` files right now)
+[] Jump to location in file given by timestamps, and perform audio processing
