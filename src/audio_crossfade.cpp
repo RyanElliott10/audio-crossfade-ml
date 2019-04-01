@@ -19,7 +19,7 @@
 
 void verify_arguments(const std::vector<std::string> arguments)
 {
-  if (arguments.size() != 3) {
+  if (arguments.size() != 5) {
     const std::string error = get_red_error();
     std::cerr << error << " Invalid number of arguments. ./audio_crossfade [ audio_file1 ] [ audio_file2 ]" << std::endl;
     exit(EXIT_FAILURE);
