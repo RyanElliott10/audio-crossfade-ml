@@ -8,7 +8,7 @@
 
 #include <string>
 
-#include "utils.hpp"
+#include "../include/utils.hpp"
 
 std::string get_red_error()
 {

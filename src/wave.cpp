@@ -12,9 +12,10 @@
 #include <fstream>
 #include <stdio.h>
 #include <iostream>
+#include <fcntl.h>
 
 #include "wave.hpp"
-#include "utils.hpp"
+#include "../include/utils.hpp"
 
 Wave::Wave()
 {
@@ -29,38 +30,43 @@ Wave::~Wave()
 void Wave::init_header()
 {
   _header.file_size       = 0;
+  _header.format_length   = 0;
   _header.format_type     = 0;
   _header.num_channels    = 0;
   _header.sample_rate     = 0;
   _header.byte_rate       = 0;
   _header.block_align     = 0;
   _header.bits_per_sample = 0;
+  _header.data_chunk_size = 0;
 }
 
 // http://truelogic.org/wordpress/2015/09/04/parsing-a-wav-file-in-c/
 void Wave::parse_header(const char *filename)
 {
-  FILE *fd = fopen(filename, "r");
-  short count = 0;
+  FILE *fd = fopen(filename, "rw");
+  FILE *fd2 = fopen("tmpname.wav", "w+");
+  u_int64_t count = 0;
   u_int32_t read_byte;
   std::string current_string = "";
 
   if (fd == 0) {
     const std::string error = get_red_error();
-    std::cout << error << " Failed to open file " << filename << std::endl;
+    std::cerr << error << " Failed to open file " << filename << std::endl;
     exit(EXIT_FAILURE);
   }
 
-  while ((u_int32_t) (read_byte = getc(fd)) != EOF && count < WAVE_HEADER_BYTES) {
+  while ((u_int32_t) (read_byte = getc(fd)) != EOF) {
     current_string.push_back(read_byte);
     update_header_pointer(count, read_byte);
     parse_read_byte_from_header(current_string, count);
     count++;
+    fprintf(fd2, "%c", read_byte);
   }
 
+  fclose(fd);
   if (count != WAVE_HEADER_BYTES) {
     const std::string error = get_red_error();
-    std::cout << error << " Unable to parse header for file " << filename << std::endl;
+    std::cerr << error << " Unable to parse header for file " << filename << std::endl;
     exit(EXIT_FAILURE);
   }
 
@@ -71,6 +77,11 @@ void Wave::parse_read_byte_from_header(std::string &current_string, const int co
 {
   switch (count) {
     case 3:
+      if (current_string != "RIFF") {
+        const std::string error = get_red_error();
+        std::cerr << error << " File not using RIFF format " << std::endl;
+        exit(EXIT_FAILURE);
+      }
       _header.riff = current_string;
       current_string = "";
       break;
