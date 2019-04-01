@@ -20,10 +20,10 @@ Right now, I'm thinking the file/data/bit processing and everything should be do
 
 ### General Notes
 * There are quite a few audio codecs that should be considered:
-    * WAVE (General purpose)
-    * MP3 (General purpose)
-    * AAC (Spotify)
-    * OGG (Apple Music)
+    * `.wav` (General purpose)
+    * `.mp3` (General purpose)
+    * `.aac` (Spotify)
+    * `.ogg` (Apple Music)
     
     
 ### Rough Outline
