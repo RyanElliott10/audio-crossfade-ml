@@ -11,7 +11,7 @@
 
 #include <string>
 
-#include "header_structs.hpp"
+#include "../include/header_structs.hpp"
 
 class Wave
 {

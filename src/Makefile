@@ -11,13 +11,13 @@ debug: audio_crossfade
 audio_crossfade : $(OBJS)
 	$(CC) $(OBJS) $(BFLAGS) -o $(MAIN)
 
-audio_crossfade.o : audio_crossfade.cpp utils.hpp
+audio_crossfade.o : audio_crossfade.cpp ../include/utils.hpp
 	$(CC) $(CXXFLAGS) -c audio_crossfade.cpp
 
-wave.o : wave.cpp wave.hpp header_structs.hpp utils.hpp
+wave.o : wave.cpp ../include/wave.hpp ../include/header_structs.hpp ../include/utils.hpp
 	$(CC) $(CXXFLAGS) -c wave.cpp
 
-utils.o : utils.cpp utils.hpp
+utils.o : utils.cpp ../include/utils.hpp
 	$(CC) $(CXXFLAGS) -c utils.cpp
 	
 clean :
