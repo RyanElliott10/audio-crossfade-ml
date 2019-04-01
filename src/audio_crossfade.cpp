@@ -14,7 +14,7 @@
 #include <iostream>
 #include <string.h>
 
-#include "wave.hpp"
+#include "../include/wave.hpp"
 #include "../include/utils.hpp"
 
 void verify_arguments(const std::vector<std::string> arguments)

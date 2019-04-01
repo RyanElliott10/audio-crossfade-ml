@@ -14,7 +14,7 @@
 #include <iostream>
 #include <fcntl.h>
 
-#include "wave.hpp"
+#include "../include/wave.hpp"
 #include "../include/utils.hpp"
 
 Wave::Wave()
