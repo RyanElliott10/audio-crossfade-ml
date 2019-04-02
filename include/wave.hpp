@@ -23,7 +23,8 @@ public:
   
 private:
   void init_header();
-  void parse_read_byte_from_header(std::string &current_string, const int count);
+  bool should_print_to_file(const u_int64_t count, const int data_chunk_start_index);
+  void parse_read_byte_from_header(const int count, std::string &current_string);
   void update_header_pointer(const short count, const u_int32_t read_byte);
   void convert_little_endian_to_big_endian(const short mod, u_int16_t &header_access);
   void convert_little_endian_to_big_endian(const short mod, u_int32_t &header_access);
