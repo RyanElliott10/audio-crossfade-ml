@@ -23,7 +23,6 @@ public:
   
 private:
   void init_header();
-  // Use pass by reference to avoid passing a billion chars each time this is called
   bool should_print_to_file(const u_int64_t count, const int data_chunk_start_index);
   void parse_read_byte_from_header(const int count, std::string &current_string);
   void update_header_pointer(const short count, const u_int32_t read_byte);
