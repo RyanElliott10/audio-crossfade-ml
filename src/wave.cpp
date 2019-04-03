@@ -55,17 +55,14 @@ bool Wave::should_print_to_file(const u_int64_t count, const int data_chunk_star
 void Wave::parse_header(const char *filename)
 {
   FILE *fp = fopen(filename, "rw");
-  FILE *fp2 = fopen("tmpname.wav", "w+");
-  int data_chunk_start_index = 0;
+  FILE *fp2 = fopen("sample_audio_out.wav", "w+");
+  u_int16_t data_chunk_start_index = 0;
   u_int32_t read_byte;
   u_int64_t count = 0;
   std::string current_string = "";
 
-  if (fp == 0) {
-    const std::string error = get_red_error();
-    std::cerr << error << " Failed to open file " << filename << std::endl;
-    exit(EXIT_FAILURE);
-  }
+  verify_file_open(fp, filename);
+  verify_file_open(fp2, "sample_audio_out.wav");
 
   std::cout << "Reading file " << filename << std::endl;
   while ((u_int32_t) (read_byte = getc(fp)) != EOF) {
@@ -107,9 +104,7 @@ void Wave::parse_read_byte_from_header(const int count, std::string &current_str
   switch (count) {
     case 3:
       if (current_string != "RIFF") {
-        const std::string error = get_red_error();
-        std::cerr << error << " File not using RIFF format " << std::endl;
-        exit(EXIT_FAILURE);
+        display_error("File not using RIFF format");
       }
       _header.riff = current_string;
       current_string = "";
@@ -187,8 +182,8 @@ void Wave::print_header_contents()
   printf("\n----RIFF chunk descriptor----\n");
   std::cout << "Riff Marker:         " << _header.riff << std::endl;
   std::cout << "File Size:           " << _header.file_size << " Bytes" << std::endl;
-  std::cout << "                     " << _header.file_size / 1024.0 << "  KB" << std::endl;
-  std::cout << "                     " << _header.file_size / (1024.0 * 1024) << "  MB" << std::endl;
+  std::cout << "                     " << _header.file_size / 1000.0 << "  KB" << std::endl;
+  std::cout << "                     " << _header.file_size / (1000.0 * 1000.0) << "  MB" << std::endl;
   std::cout << "File Type:           " << _header.file_type << std::endl;
 
   printf("\n----fmt sub-chunk----\n");
