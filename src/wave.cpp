@@ -53,15 +53,17 @@ void Wave::parse_header(const char *read_file_name, const char *write_file_name)
   u_int64_t count = 0;
   std::string current_string = "";
   Wave::data_chunk_start_index = 0;
+  Wave::filename = std::string(read_file_name);
 
   verify_file_open(fp, read_file_name);
-  verify_file_open(fp2, "sample_audio_out.wav");
+  verify_file_open(fp2, write_file_name);
 
   std::cout << "Parsing header from " << read_file_name << std::endl;
   while ((u_int32_t) (read_byte = getc(fp)) != EOF) {
     // Append and process data only if not in data sub chunk
     if (Wave::_header.data_marker != DATA_CHUNK_NAME) {
       current_string.push_back(read_byte);
+      _header.header_in_byte_form.push_back(read_byte);
       Wave::update_header_pointer(count, read_byte);
       Wave::parse_read_byte_from_header(count, current_string);
 
@@ -225,4 +227,14 @@ void Wave::print_header_contents()
   printf("\n---- data sub-chunk ----\n");
   std::cout << "Data Marker:         " << Wave::_header.data_marker << std::endl;
   std::cout << "Data Chunk Size:     " << Wave::_header.data_chunk_size << std::endl;
+}
+
+std::string Wave::get_filename()
+{
+  return Wave::filename;
+}
+
+struct WaveHeaderTemplate Wave::get_header()
+{
+  return Wave::_header;
 }
