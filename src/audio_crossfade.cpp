@@ -39,8 +39,20 @@ int main(int argc, char *argv[])
   verify_arguments(arguments);
   #endif
 
-  Wave wave_file;
-  wave_file.parse_header(arguments[1].c_str());
+  const char *write_file1 = "sample_audio_out1.wav";
+  const char *write_file2 = "sample_audio_out2.wav";
+
+  std::cout << "\n\n===== Handling file " << arguments[2] << " =====" << std::endl;
+  Wave wave_file1;
+  wave_file1.parse_header(arguments[1].c_str(), write_file1);
+  wave_file1.write_song_to_file(arguments[1].c_str(), write_file1);
+  wave_file1.print_header_contents();
+
+  std::cout << "\n\n===== Handling file " << arguments[2] << " =====" << std::endl;
+  Wave wave_file2;
+  wave_file2.parse_header(arguments[2].c_str(), write_file2);
+  wave_file2.write_song_to_file(arguments[2].c_str(), write_file2);
+  wave_file2.print_header_contents();
   
   return 0;
 }
