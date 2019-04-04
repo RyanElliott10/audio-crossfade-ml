@@ -35,6 +35,7 @@ struct WaveHeaderTemplate
     u_int16_t   bits_per_sample; // 34-35
     std::string data_marker;     // 36-39
     u_int32_t   data_chunk_size; // 40-43
+    std::string header_in_byte_form;
 };
 
 struct HeaderPointer

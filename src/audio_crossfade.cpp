@@ -16,6 +16,7 @@
 
 #include "../include/wave.hpp"
 #include "../include/utils.hpp"
+#include "../include/merge_audio_files.hpp"
 
 #define EXPECT_NUM_ARGUMENTS 6
 
@@ -53,6 +54,9 @@ int main(int argc, char *argv[])
   wave_file2.parse_header(arguments[2].c_str(), write_file2);
   wave_file2.write_song_to_file(arguments[2].c_str(), write_file2);
   wave_file2.print_header_contents();
+
+  MergeAudioFiles merger;
+  merger.merge_two_files(wave_file1, wave_file2, 10, 20);
   
   return 0;
 }
