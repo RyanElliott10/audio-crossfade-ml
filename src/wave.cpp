@@ -45,19 +45,19 @@ void Wave::init_header()
 }
 
 // http://truelogic.org/wordpress/2015/09/04/parsing-a-wav-file-in-c/
-void Wave::parse_header(const char *filename)
+void Wave::parse_header(const char *read_file_name, const char *write_file_name)
 {
-  FILE *fp = fopen(filename, "rw");
-  FILE *fp2 = fopen("sample_audio_out.wav", "w+");
+  FILE *fp = fopen(read_file_name, "r");
+  FILE *fp2 = fopen(write_file_name, "w+");
   u_int32_t read_byte;
   u_int64_t count = 0;
   std::string current_string = "";
   Wave::data_chunk_start_index = 0;
 
-  verify_file_open(fp, filename);
+  verify_file_open(fp, read_file_name);
   verify_file_open(fp2, "sample_audio_out.wav");
 
-  std::cout << "Parsing header from " << filename << std::endl;
+  std::cout << "Parsing header from " << read_file_name << std::endl;
   while ((u_int32_t) (read_byte = getc(fp)) != EOF) {
     // Append and process data only if not in data sub chunk
     if (Wave::_header.data_marker != DATA_CHUNK_NAME) {
@@ -71,7 +71,7 @@ void Wave::parse_header(const char *filename)
       }
     }
 
-    if (Wave::should_write_to_header(cout, current_string)) {
+    if (Wave::should_write_to_header(count, current_string)) {
       fprintf(fp2, "%c", read_byte);
     } else {
       break;
@@ -79,9 +79,6 @@ void Wave::parse_header(const char *filename)
 
     count++;
   }
-
-  Wave::print_header_contents();
-  write_song_to_file(fp, fp2);
 
   fclose(fp);
 }
@@ -99,12 +96,16 @@ bool Wave::should_write_to_header(const u_int64_t count, const std::string &curr
     || count < Wave::data_chunk_start_index + 1;
 }
 
-void Wave::write_song_to_file(FILE *read_file, FILE *write_file)
+void Wave::write_song_to_file(const char *read_file_name, const char *write_file_name)
 {
+  FILE *read_file = fopen(read_file_name, "r");
+  FILE *write_file = fopen(write_file_name, "w+");
   u_int32_t read_byte;
   const u_int64_t start_index = Wave::_header.byte_rate * NUM_SECONDS_INTO_SONG;
   u_int64_t count = 0;
+
   fseek(read_file, start_index, SEEK_SET);
+  fseek(write_file, 0, SEEK_END);
 
   std::cout << "\nWriting to file, skipping the first " << NUM_SECONDS_INTO_SONG << " seconds..." << std::endl;
   while ((read_byte = getc(read_file)) != EOF) {
@@ -204,14 +205,14 @@ void Wave::convert_little_endian_to_big_endian(const short mod, u_int32_t &heade
 
 void Wave::print_header_contents()
 {
-  printf("\n----RIFF chunk descriptor----\n");
+  printf("\n---- RIFF chunk descriptor ----\n");
   std::cout << "Riff Marker:         " << Wave::_header.riff << std::endl;
   std::cout << "File Size:           " << Wave::_header.file_size << " Bytes" << std::endl;
   std::cout << "                     " << Wave::_header.file_size / 1000.0 << "  KB" << std::endl;
   std::cout << "                     " << Wave::_header.file_size / (1000.0 * 1000.0) << "  MB" << std::endl;
   std::cout << "File Type:           " << Wave::_header.file_type << std::endl;
 
-  printf("\n----fmt sub-chunk----\n");
+  printf("\n---- fmt sub-chunk ----\n");
   std::cout << "Format Marker:       " << Wave::_header.format << std::endl;
   std::cout << "Format Length:       " << Wave::_header.format_length << std::endl;
   std::cout << "Format Type:         " << Wave::_header.format_type << std::endl;
@@ -221,7 +222,7 @@ void Wave::print_header_contents()
   std::cout << "Block Align:         " << Wave::_header.block_align << std::endl;
   std::cout << "Bits Per Sample:     " << Wave::_header.bits_per_sample << std::endl;
 
-  printf("\n----data sub-chunk----\n");
+  printf("\n---- data sub-chunk ----\n");
   std::cout << "Data Marker:         " << Wave::_header.data_marker << std::endl;
   std::cout << "Data Chunk Size:     " << Wave::_header.data_chunk_size << std::endl;
 }
