@@ -2,4 +2,4 @@
 a.out
 *.o
 audio_crossfade
-tmpname.wav
+*.wav

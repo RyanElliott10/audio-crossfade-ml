@@ -11,5 +11,7 @@
 
 std::string get_red_error();
 std::string get_yellow_warning();
+void verify_file_open(const FILE *fp, const char *filename);
+void display_error(const char *message);
 
 #endif

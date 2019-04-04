@@ -11,7 +11,7 @@ Run `make` to create a release version. This will ignore all `#if defined(DEBUG)
 Run `make debug` to create a debug version. This will catch all `#if defined(DEBUG)` statements and run with the correct debug statements and checks.
 
 ## Running
-To use, run `./audio_crossfade [ audio_file1 ] [ audio_file2 ] [ timestamp1 ] [ timestamp2 ] [ crossfade_duraiton ]`
+To use, run `./audio_crossfade [ audio_file1 ] [ audio_file2 ] [ timestamp1 ] [ timestamp2 ] [ crossfade_duration ]`
 
 ## Notes
 

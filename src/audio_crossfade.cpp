@@ -17,13 +17,13 @@
 #include "../include/wave.hpp"
 #include "../include/utils.hpp"
 
-#define EXPECT_NUM_ARGUMENTS 5
+#define EXPECT_NUM_ARGUMENTS 6
 
 void verify_arguments(const std::vector<std::string> arguments)
 {
   if (arguments.size() != EXPECT_NUM_ARGUMENTS) {
     const std::string error = get_red_error();
-    std::cerr << error << " Invalid number of arguments. ./audio_crossfade [ audio_file1 ] [ audio_file2 ]" << std::endl;
+    std::cerr << error << " Invalid number of arguments. ./audio_crossfade [ audio_file1 ] [ audio_file2 ] [ timestamp1 ] [ timestamp2 ] [ crossfade_duration ]" << std::endl;
     exit(EXIT_FAILURE);
   }
 }
