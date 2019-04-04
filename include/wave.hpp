@@ -18,8 +18,9 @@ class Wave
 public:
   Wave();
   ~Wave();
-  void parse_header(const char *filename);
+  void parse_header(const char *read_file_name, const char *write_file_name);
   void print_header_contents();
+  void write_song_to_file(const char *read_file_name, const char *write_file_name);
   
 private:
   void init_header();
@@ -28,7 +29,6 @@ private:
   void update_header_pointer(const short count, const u_int32_t read_byte);
   void convert_little_endian_to_big_endian(const short mod, u_int16_t &header_access);
   void convert_little_endian_to_big_endian(const short mod, u_int32_t &header_access);
-  void write_song_to_file(FILE *read_file, FILE *write_file);
   
   struct WaveHeaderTemplate _header;
   struct HeaderPointer _header_pointer;
