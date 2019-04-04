@@ -23,7 +23,7 @@ public:
   
 private:
   void init_header();
-  bool should_write_to_header(const std::string &current_string, const u_int64_t count);
+  bool should_write_to_header(const u_int64_t count, const std::string &current_string);
   void parse_read_byte_from_header(const int count, std::string &current_string);
   void update_header_pointer(const short count, const u_int32_t read_byte);
   void convert_little_endian_to_big_endian(const short mod, u_int16_t &header_access);

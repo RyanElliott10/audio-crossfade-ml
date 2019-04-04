@@ -17,7 +17,7 @@
 #include "../include/wave.hpp"
 #include "../include/utils.hpp"
 
-#define TEST_DATA_CHUNK_NAME "data"
+#define DATA_CHUNK_NAME "data"
 #define NUM_SECONDS_INTO_SONG 100
 
 Wave::Wave()
@@ -60,18 +60,18 @@ void Wave::parse_header(const char *filename)
   std::cout << "Parsing header from " << filename << std::endl;
   while ((u_int32_t) (read_byte = getc(fp)) != EOF) {
     // Append and process data only if not in data sub chunk
-    if (Wave::_header.data_marker != TEST_DATA_CHUNK_NAME) {
+    if (Wave::_header.data_marker != DATA_CHUNK_NAME) {
       current_string.push_back(read_byte);
       Wave::update_header_pointer(count, read_byte);
       Wave::parse_read_byte_from_header(count, current_string);
 
       // Set the starting index of the data chunk
-      if (current_string.find(TEST_DATA_CHUNK_NAME) != std::string::npos && data_chunk_start_index == 0) {
+      if (current_string.find(DATA_CHUNK_NAME) != std::string::npos && data_chunk_start_index == 0) {
         Wave::data_chunk_start_index = count;
       }
     }
 
-    if (Wave::should_write_to_header(current_string, count)) {
+    if (Wave::should_write_to_header(cout, current_string)) {
       fprintf(fp2, "%c", read_byte);
     } else {
       break;
@@ -88,14 +88,14 @@ void Wave::parse_header(const char *filename)
 
 /**
  * This is slightly confusing but:
- * Write to the file if we're still reading the contents of the header (first && part)
- * OR if we just finished reading the header. It appears the header has to be padded
- * by a NULL byte, hence the count < Wave::data_chunk_start_index + 1
+ *   Write to the Wave::_header if we're still reading the contents of the header
+ *   (first && part) OR if we just finished reading the header. It appears the header 
+ *   has to be padded by a NULL byte, hence the count < Wave::data_chunk_start_index + 1
  */
-bool Wave::should_write_to_header(const std::string &current_string, const u_int64_t count)
+bool Wave::should_write_to_header(const u_int64_t count, const std::string &current_string)
 {
-  return (Wave::_header.data_marker != TEST_DATA_CHUNK_NAME
-    && current_string.find(TEST_DATA_CHUNK_NAME) == std::string::npos)
+  return (Wave::_header.data_marker != DATA_CHUNK_NAME
+    && current_string.find(DATA_CHUNK_NAME) == std::string::npos)
     || count < Wave::data_chunk_start_index + 1;
 }
 
@@ -223,5 +223,5 @@ void Wave::print_header_contents()
 
   printf("\n----data sub-chunk----\n");
   std::cout << "Data Marker:         " << Wave::_header.data_marker << std::endl;
-  // std::cout << "Data Chunk Size:     " << Wave::_header.data_chunk_size << std::endl;
+  std::cout << "Data Chunk Size:     " << Wave::_header.data_chunk_size << std::endl;
 }
