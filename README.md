@@ -13,10 +13,8 @@ Run `make debug` to create a debug version. This will catch all `#if defined(DEB
 ## Running
 To use, run `./audio_crossfade [ audio_file1 ] [ audio_file2 ] [ timestamp1 ] [ timestamp2 ] [ crossfade_duration ]`
 
-## Notes
-
-@charlie
-Right now, I'm thinking the file/data/bit processing and everything should be done in C or C++. We should probably use Python for the machine learning part to take advantage of easy to use libraries like NumPy and TensorFlow. Just my two cents, though.
+## General Plan
+The file/data/bit processing and everything should be done in C or C++. Use Python for the machine learning part to take advantage of easy to use libraries, like NumPy and TensorFlow.
 
 ### General Notes
 * There are quite a few audio codecs that should be considered:
