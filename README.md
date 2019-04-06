@@ -5,10 +5,10 @@ A tool to effectively -- and smoothly -- crossfade audio
 The make file allows for two build configuration: release and debug.
 
 ### Release Version
-Run `make` to create a release version. This will ignore all `#if defined(DEBUG)` statements and run as a proper release.
+Run `make` or `make all` to create a release version. This will ignore all `#if defined(DEBUG)` statements and run as a proper release.
 
 ### Debug Version
-Run `make debug` to create a debug version. This will catch all `#if defined(DEBUG)` statements and run with the correct debug statements and checks.
+Run `make debug` to create a debug version. This will catch all `#if defined(DEBUG)` statements and run with the correct debugging statements and checks.
 
 ## Running
 To use, run `./audio_crossfade [ audio_file1 ] [ audio_file2 ] [ timestamp1 ] [ timestamp2 ] [ crossfade_duration ]`
