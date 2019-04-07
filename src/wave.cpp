@@ -18,7 +18,6 @@
 #include "../include/utils.hpp"
 
 #define DATA_CHUNK_NAME "data"
-#define NUM_SECONDS_INTO_SONG 100
 
 Wave::Wave()
 {
@@ -96,18 +95,18 @@ bool Wave::should_write_to_header(const u_int64_t count, const std::string &curr
     || count < Wave::data_chunk_start_index + 1;
 }
 
-void Wave::write_song_to_file(const char *read_file_name, const char *write_file_name)
+void Wave::write_song_to_file(const char *read_file_name, const char *write_file_name, const double start_timestamp)
 {
   FILE *read_file = fopen(read_file_name, "r");
   FILE *write_file = fopen(write_file_name, "w+");
   u_int32_t read_byte;
-  const u_int64_t start_index = Wave::_header.byte_rate * NUM_SECONDS_INTO_SONG;
+  const u_int64_t start_index = Wave::_header.byte_rate * start_timestamp;
   u_int64_t count = 0;
 
   fseek(read_file, start_index, SEEK_SET);
   fseek(write_file, 0, SEEK_END);
 
-  std::cout << "\nWriting to file, skipping the first " << NUM_SECONDS_INTO_SONG << " seconds..." << std::endl;
+  std::cout << "\nWriting to file, skipping the first " << start_timestamp << " seconds..." << std::endl;
   while ((read_byte = getc(read_file)) != EOF) {
     fprintf(write_file, "%c", read_byte);
     count++;
@@ -209,7 +208,7 @@ void Wave::convert_little_endian_to_big_endian(const short mod, u_int32_t &heade
   header_access |= Wave::_header_pointer.read_byte;
 }
 
-void Wave::print_header_contents()
+const void Wave::print_header_contents()
 {
   printf("\n---- RIFF chunk descriptor ----\n");
   std::cout << "Riff Marker:         " << Wave::_header.riff << std::endl;
@@ -233,17 +232,17 @@ void Wave::print_header_contents()
   std::cout << "Data Chunk Size:     " << Wave::_header.data_chunk_size << std::endl;
 }
 
-std::string Wave::get_filename()
+const std::string Wave::get_filename()
 {
   return Wave::filename;
 }
 
-struct WaveHeaderTemplate Wave::get_header()
+const struct WaveHeaderTemplate Wave::get_header()
 {
   return Wave::_header;
 }
 
-u_int16_t Wave::get_data_chunk_start_index()
+const u_int16_t Wave::get_data_chunk_start_index()
 {
   return Wave::data_chunk_start_index;
 }
