@@ -23,6 +23,7 @@ public:
   void write_song_to_file(const char *read_file_name, const char *write_file_name);
   std::string get_filename();
   struct WaveHeaderTemplate get_header();
+  u_int16_t get_data_chunk_start_index();
 
 private:
   void init_header();

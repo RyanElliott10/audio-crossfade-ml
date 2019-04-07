@@ -29,6 +29,16 @@ void verify_arguments(const std::vector<std::string> arguments)
   }
 }
 
+Wave parse_file(std::string read_file, std::string write_file)
+{
+  std::cout << "===== Handling file " << write_file << " =====" << std::endl;
+  Wave wave_file;
+  wave_file.parse_header(read_file.c_str(), write_file.c_str());
+  wave_file.write_song_to_file(read_file.c_str(), write_file.c_str());
+  // wave_file.print_header_contents();
+  return wave_file;
+}
+
 int main(int argc, char *argv[])
 {
   std::vector<std::string> arguments;
@@ -36,27 +46,24 @@ int main(int argc, char *argv[])
     arguments.push_back(std::string(argv[i]));
   }
 
+  const double from_timestamp = std::stoi(arguments[3]);
+  const double to_timestamp = std::stoi(arguments[4]);
+
   #if !defined(DEBUG)
   verify_arguments(arguments);
   #endif
 
-  const char *write_file1 = "sample_audio_out1.wav";
-  const char *write_file2 = "sample_audio_out2.wav";
+  std::size_t index = std::string(arguments[1]).find_last_of("/");
+  const std::string write_file1 = std::string("../output/").append(arguments[1].substr(index + 1));
+  index = std::string(arguments[2]).find_last_of("/");
+  const std::string write_file2 = std::string("../output/").append(arguments[2].substr(index + 1));
 
-  std::cout << "\n\n===== Handling file " << arguments[2] << " =====" << std::endl;
-  Wave wave_file1;
-  wave_file1.parse_header(arguments[1].c_str(), write_file1);
-  wave_file1.write_song_to_file(arguments[1].c_str(), write_file1);
-  wave_file1.print_header_contents();
-
-  std::cout << "\n\n===== Handling file " << arguments[2] << " =====" << std::endl;
-  Wave wave_file2;
-  wave_file2.parse_header(arguments[2].c_str(), write_file2);
-  wave_file2.write_song_to_file(arguments[2].c_str(), write_file2);
-  wave_file2.print_header_contents();
+  Wave wave_file1 = parse_file(arguments[1], write_file1);
+  std::cout << std::endl << std::endl;
+  Wave wave_file2 = parse_file(arguments[2], write_file2);
 
   MergeAudioFiles merger;
-  merger.merge_two_files(wave_file1, wave_file2, 10, 20);
+  merger.merge_two_files(wave_file1, wave_file2, from_timestamp, to_timestamp);
   
   return 0;
 }
