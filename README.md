@@ -27,7 +27,10 @@ The file/data/bit processing and everything should be done in C or C++. Use Pyth
 ### Rough Outline
 - [x] Read contents of a given audio track through the command line
 - [x] Parse file headers (only supports `.wav` files right now)
-- [ ] Jump to location in file given by timestamps, and perform audio processing
+- [x] Jump to location in file given by timestamps
+- [x] Merge the two audio files (without smoothing)
+- [ ] Add audio intertwining
+- [ ] Add audio smoothing
 
 
 ### Future Plans
