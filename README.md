@@ -11,9 +11,13 @@ Run `make`, `make release`, or `make all` to create a release version. This will
 Run `make debug` to create a debug version. This will catch all `#if defined(DEBUG)` statements and run with the correct debugging statements and checks.
 
 ## Running
-To use, run `./audio_crossfade [ audio_file1 ] [ audio_file2 ] [ timestamp1 ] [ timestamp2 ] [ crossfade_duration ]`.
-To run using sample data, use: `./audio_crossfade ../test_audio_files/5AM.wav ../test_audio_files/Roll\ Call.wav 20 40 12
-`. This will use the two provided sample songs where 5AM is being skipping from, and Roll Call is being skipped to. This will begin the crossfade at the 20th second in 5AM, and start Roll Call from the 40th second. The crossfade will last 12 seconds.
+To use, run
+`./audio_crossfade [ audio_file1 ] [ audio_file2 ] [ timestamp1 ] [ timestamp2 ] [ crossfade_duration ]`.
+
+To run using sample data, use:
+`./audio_crossfade ../test_audio_files/5AM.wav ../test_audio_files/Roll\ Call.wav 20 40 12
+`.
+This will use the two provided sample songs where 5AM is being skipping from, and Roll Call is being skipped to. This will begin the crossfade at the 20th second in 5AM, and start Roll Call from the 40th second. The crossfade will last 12 seconds.
 
 ## General Plan
 The file/data/bit processing and everything should be done in C or C++. Use Python for the machine learning part to take advantage of easy to use libraries, like NumPy and TensorFlow.
