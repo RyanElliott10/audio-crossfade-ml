@@ -4,6 +4,7 @@ OBJS = audio_crossfade.o wave.o merge_audio_files.o utils.o
 MAIN = audio_crossfade
 
 all: audio_crossfade
+release: audio_crossfade
 
 debug: CXXFLAGS += -DDEBUG
 debug: audio_crossfade

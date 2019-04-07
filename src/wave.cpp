@@ -47,19 +47,19 @@ void Wave::init_header()
 // http://truelogic.org/wordpress/2015/09/04/parsing-a-wav-file-in-c/
 void Wave::parse_header(const char *read_file_name, const char *write_file_name)
 {
-  FILE *fp = fopen(read_file_name, "r");
-  FILE *fp2 = fopen(write_file_name, "w+");
+  FILE *read_file = fopen(read_file_name, "r");
+  FILE *write_file = fopen(write_file_name, "w+");
   u_int32_t read_byte;
   u_int64_t count = 0;
   std::string current_string = "";
   Wave::data_chunk_start_index = 0;
   Wave::filename = std::string(read_file_name);
 
-  verify_file_open(fp, read_file_name);
-  verify_file_open(fp2, write_file_name);
+  verify_file_open(read_file, read_file_name);
+  verify_file_open(write_file, write_file_name);
 
   std::cout << "Parsing header from " << read_file_name << std::endl;
-  while ((u_int32_t) (read_byte = getc(fp)) != EOF) {
+  while ((u_int32_t) (read_byte = getc(read_file)) != EOF) {
     // Append and process data only if not in data sub chunk
     if (Wave::_header.data_marker != DATA_CHUNK_NAME) {
       current_string.push_back(read_byte);
@@ -74,15 +74,13 @@ void Wave::parse_header(const char *read_file_name, const char *write_file_name)
     }
 
     if (Wave::should_write_to_header(count, current_string)) {
-      fprintf(fp2, "%c", read_byte);
+      fprintf(write_file, "%c", read_byte);
     } else {
       break;
     }
-
     count++;
   }
-
-  fclose(fp);
+  fclose(read_file);
 }
 
 /**
@@ -117,10 +115,16 @@ void Wave::write_song_to_file(const char *read_file_name, const char *write_file
 
   #if !defined(DEBUG)
   if (count != WAVE_HEADER_BYTES) {
-    const std::string error = get_red_error();
-    std::cerr << error << " Unable to write to file" << std::endl;
-    std::cerr << error << " Index of last written byte: " << count + start_index + Wave::data_chunk_start_index + 1 << std::endl;
-    exit(EXIT_FAILURE);
+    char input;
+    const std::string warning = get_yellow_warning();
+    std::cerr << warning << " Unable to write correctly formatted header to file" << std::endl;
+    std::cerr << "This may be due to the file's header having more information than a standard .wav file. In this case, you should continue." << std::endl;
+    std::cerr << warning << " Index of last written byte: " << count + start_index + Wave::data_chunk_start_index + 1 << std::endl;
+    std::cout << "Continue? (y/n): ";
+    std::cin >> input;
+    if (input != 'y') {
+      exit(EXIT_FAILURE);
+    }
   } else {
     std::cout << "Successfully wrote the audio file" << std::endl;
   }
@@ -237,4 +241,9 @@ std::string Wave::get_filename()
 struct WaveHeaderTemplate Wave::get_header()
 {
   return Wave::_header;
+}
+
+u_int16_t Wave::get_data_chunk_start_index()
+{
+  return Wave::data_chunk_start_index;
 }

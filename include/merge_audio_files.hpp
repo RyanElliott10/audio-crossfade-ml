@@ -19,8 +19,11 @@ public:
   ~MergeAudioFiles();
   void merge_two_files(Wave skipping_from_file, Wave skipping_to_file, const double from_timestamp, const double to_timestamp);
   void write_file_header(struct WaveHeaderTemplate header_to_write);
+  void write_first_song(Wave skipping_from_file, const double from_timestamp);
+  void write_second_song(Wave skipping_to_file, const double to_timestamp);
 
 private:
+  FILE *merged_file;
 };
 
 #endif /* merge_audio_files_hpp */
