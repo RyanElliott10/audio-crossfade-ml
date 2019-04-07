@@ -16,7 +16,7 @@
 
 #include "../include/wave.hpp"
 #include "../include/utils.hpp"
-#include "../include/merge_audio_files.hpp"
+#include "../include/audio_file_merger.hpp"
 
 #define EXPECT_NUM_ARGUMENTS 6
 
@@ -29,13 +29,15 @@ void verify_arguments(const std::vector<std::string> arguments)
   }
 }
 
-Wave parse_file(std::string read_file, std::string write_file)
+Wave parse_file(const std::string read_file, const std::string write_file, const double start_timestamp)
 {
-  std::cout << "===== Handling file " << write_file << " =====" << std::endl;
+  std::cout << "      Handling file " << write_file << std::endl;
   Wave wave_file;
   wave_file.parse_header(read_file.c_str(), write_file.c_str());
-  wave_file.write_song_to_file(read_file.c_str(), write_file.c_str());
-  // wave_file.print_header_contents();
+  wave_file.write_song_to_file(read_file.c_str(), write_file.c_str(), start_timestamp);
+  #if defined(DEBUG)
+  wave_file.print_header_contents();
+  #endif
   return wave_file;
 }
 
@@ -48,6 +50,7 @@ int main(int argc, char *argv[])
 
   const double from_timestamp = std::stoi(arguments[3]);
   const double to_timestamp = std::stoi(arguments[4]);
+  const double crossfade_duration = std::stoi(arguments[5]);
 
   #if !defined(DEBUG)
   verify_arguments(arguments);
@@ -58,12 +61,12 @@ int main(int argc, char *argv[])
   index = std::string(arguments[2]).find_last_of("/");
   const std::string write_file2 = std::string("../output/").append(arguments[2].substr(index + 1));
 
-  Wave wave_file1 = parse_file(arguments[1], write_file1);
+  Wave wave_file1 = parse_file(arguments[1], write_file1, from_timestamp);
   std::cout << std::endl << std::endl;
-  Wave wave_file2 = parse_file(arguments[2], write_file2);
+  Wave wave_file2 = parse_file(arguments[2], write_file2, to_timestamp);
 
-  MergeAudioFiles merger;
-  merger.merge_two_files(wave_file1, wave_file2, from_timestamp, to_timestamp);
+  AudioFileMerger merger;
+  merger.merge_two_files(wave_file1, wave_file2, from_timestamp, to_timestamp, crossfade_duration);
   
   return 0;
 }

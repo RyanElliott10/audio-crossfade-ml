@@ -19,11 +19,11 @@ public:
   Wave();
   ~Wave();
   void parse_header(const char *read_file_name, const char *write_file_name);
-  void print_header_contents();
-  void write_song_to_file(const char *read_file_name, const char *write_file_name);
-  std::string get_filename();
-  struct WaveHeaderTemplate get_header();
-  u_int16_t get_data_chunk_start_index();
+  const void print_header_contents();
+  void write_song_to_file(const char *read_file_name, const char *write_file_name, const double start_timestamp);
+  const std::string get_filename();
+  const struct WaveHeaderTemplate get_header();
+  const u_int16_t get_data_chunk_start_index();
 
 private:
   void init_header();
