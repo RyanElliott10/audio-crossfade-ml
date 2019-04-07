@@ -5,7 +5,7 @@ A tool to effectively -- and smoothly -- crossfade audio
 The make file allows for two build configuration: release and debug.
 
 ### Release Version
-Run `make` or `make all` to create a release version. This will ignore all `#if defined(DEBUG)` statements and run as a proper release.
+Run `make`, `make release`, or `make all` to create a release version. This will ignore all `#if defined(DEBUG)` statements and run as a proper release.
 
 ### Debug Version
 Run `make debug` to create a debug version. This will catch all `#if defined(DEBUG)` statements and run with the correct debugging statements and checks.
