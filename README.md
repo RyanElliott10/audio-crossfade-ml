@@ -35,7 +35,7 @@ The file/data/bit processing and everything should be done in C or C++. Use Pyth
 - [x] Parse file headers (only supports `.wav` files right now)
 - [x] Jump to location in file given by timestamps
 - [x] Merge the two audio files (without smoothing)
-- [ ] Add audio intertwining
+- [x] Add audio intertwining
 - [ ] Add audio smoothing
 
 
