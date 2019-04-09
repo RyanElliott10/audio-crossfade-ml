@@ -18,15 +18,21 @@
 #include "../include/utils.hpp"
 #include "../include/audio_file_merger.hpp"
 
-#define EXPECT_NUM_ARGUMENTS 6
+#define EXPECTED_NUM_ARGUMENTS 6
 
-void verify_arguments(const std::vector<std::string> arguments)
+bool verify_arguments(const std::vector<std::string> arguments)
 {
-  if (arguments.size() != EXPECT_NUM_ARGUMENTS) {
+  if (arguments.size() < EXPECTED_NUM_ARGUMENTS) {
     const std::string error = get_red_error();
     std::cerr << error << " Invalid number of arguments. ./audio_crossfade [ audio_file1 ] [ audio_file2 ] [ timestamp1 ] [ timestamp2 ] [ crossfade_duration ]" << std::endl;
     exit(EXIT_FAILURE);
+  } else if (arguments.size() > EXPECTED_NUM_ARGUMENTS) {
+    // Change this to do it safely
+    if (arguments[6] == "-o") {
+      return true;
+    }
   }
+  return false;
 }
 
 Wave parse_file(const std::string read_file, const std::string write_file, const double start_timestamp)
@@ -51,10 +57,7 @@ int main(int argc, char *argv[])
   const double from_timestamp = std::stoi(arguments[3]);
   const double to_timestamp = std::stoi(arguments[4]);
   const double crossfade_duration = std::stoi(arguments[5]);
-
-  #if !defined(DEBUG)
-  verify_arguments(arguments);
-  #endif
+  const bool should_output_crossfade = verify_arguments(arguments);
 
   std::size_t index = std::string(arguments[1]).find_last_of("/");
   const std::string write_file1 = std::string("../output/").append(arguments[1].substr(index + 1));
@@ -65,8 +68,8 @@ int main(int argc, char *argv[])
   std::cout << std::endl << std::endl;
   Wave wave_file2 = parse_file(arguments[2], write_file2, to_timestamp);
 
-  AudioFileMerger merger;
-  merger.merge_two_files(wave_file1, wave_file2, from_timestamp, to_timestamp, crossfade_duration);
+  AudioFileMerger merger(wave_file1, wave_file2, from_timestamp, to_timestamp, crossfade_duration, should_output_crossfade);
+  merger.merge_two_files();
   
   return 0;
 }
