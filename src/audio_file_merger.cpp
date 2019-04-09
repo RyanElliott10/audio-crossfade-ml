@@ -44,17 +44,17 @@ void AudioFileMerger::merge_two_files()
   std::cout << "\nSkipping from file " << AudioFileMerger::skipping_from_file.get_filename() << " at "
     << AudioFileMerger::from_timestamp << " seconds" << std::endl;
   std::cout << "Skipping from file " << AudioFileMerger::skipping_to_file.get_filename() << " at "
-    << AudioFileMerger::to_timestamp << " seconds" << std::endl;
+     << AudioFileMerger::to_timestamp << " seconds" << std::endl;
 
   /**
    * Write the base header. All the information in here will be wrong because, well,
    * we're using one header for two different songs...
    */
-  AudioFileMerger::write_file_header(AudioFileMerger::skipping_from_file.get_header());
+  AudioFileMerger::write_file_header(skipping_from_file.get_header());
   AudioFileMerger::intertwine_audio_files();
 
-  // AudioFileMerger::write_first_song();
-  // AudioFileMerger::write_second_song();
+  // AudioFileMerger::write_first_song(skipping_from_file, from_timestamp);
+  // AudioFileMerger::write_second_song(skipping_to_file, to_timestamp);
 }
 
 void AudioFileMerger::write_file_header(struct WaveHeaderTemplate header_to_write)
@@ -74,14 +74,10 @@ void AudioFileMerger::intertwine_audio_files()
   const std::tuple<FILE *, u_int64_t> to_file_data = AudioFileMerger::get_file_pointer_for_intertwine(AudioFileMerger::skipping_to_file, AudioFileMerger::to_timestamp, true);
   FILE *from_file = std::get<0>(from_file_data);
   FILE *to_file = std::get<0>(to_file_data);
+  FILE *output_crossfade = fopen("output_crossfade", "w+");
   const u_int64_t from_index = std::get<1>(from_file_data);
   u_int64_t count = 0;
   u_int64_t crossfade_count = 0;
-  FILE *crossfade_file;
-
-  if (AudioFileMerger::should_output_crossfade) {
-    crossfade_file = fopen("crossfade_contents", "w+");
-  }
 
   /**
    * POA:
@@ -100,8 +96,8 @@ void AudioFileMerger::intertwine_audio_files()
       // UNSAFE, not chechking for EOF. Fix later
       to_read_byte = getc(to_file);
 
-      // If we're in the "crossfade" portion
-      if (crossfade_count < (crossfade_duration * AudioFileMerger::skipping_from_file.get_header().byte_rate)) {
+      if (crossfade_count < (AudioFileMerger::crossfade_duration * AudioFileMerger::skipping_from_file.get_header().byte_rate)) {
+        // If we're in the "crossfade" portion
         if (crossfade_count == 0) {
           std::cout << "Adding crossfade..." << std::endl;
         }
@@ -110,19 +106,19 @@ void AudioFileMerger::intertwine_audio_files()
         if (!AudioFileMerger::should_output_crossfade) {
           fprintf(AudioFileMerger::merged_file, "%c", byte_to_be_written);
         } else {
-          fprintf(crossfade_file, "%c", byte_to_be_written);
+          fprintf(output_crossfade, "%c", byte_to_be_written);
         }
         crossfade_count++;
       } else {
         // Otherwise, write the to file since we're past the crossfade portion
-        if (AudioFileMerger::should_output_crossfade) {
+        if (!AudioFileMerger::should_output_crossfade) {
           fprintf(AudioFileMerger::merged_file, "%c", to_read_byte);
-      }
+        }
       }
     } else {
       // If not at or past the first timestamp, normally write to the file from first audio file
-      if (AudioFileMerger::should_output_crossfade) {
-        fprintf(AudioFileMerger::merged_file, "%c", to_read_byte);
+      if (!AudioFileMerger::should_output_crossfade) {
+        fprintf(AudioFileMerger::merged_file, "%c", from_read_byte);
       }
     }
     count++;
