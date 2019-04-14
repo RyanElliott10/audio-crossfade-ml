@@ -12,7 +12,7 @@ Run `make debug` to create a debug version. This will catch all `#if defined(DEB
 
 ## Running
 To use, run
-`./audio_crossfade [ audio_file1 ] [ audio_file2 ] [ timestamp1 ] [ timestamp2 ] [ crossfade_duration ]`.
+`./audio_crossfade [ audio_file1 ] [ audio_file2 ] [ timestamp1 ] [ timestamp2 ] [ crossfade_duration ] [[ -o ]]`.
 
 To run using sample data, use:
 `./audio_crossfade ../test_audio_files/5AM.wav ../test_audio_files/Roll\ Call.wav 20 40 12
@@ -36,6 +36,8 @@ The file/data/bit processing and everything should be done in C or C++. Use Pyth
 - [x] Jump to location in file given by timestamps
 - [x] Merge the two audio files (without smoothing)
 - [x] Add audio intertwining
+- [x] Add threading
+- [x] Add output flag
 - [ ] Add audio smoothing
 
 
