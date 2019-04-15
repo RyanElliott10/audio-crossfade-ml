@@ -6,14 +6,14 @@
 //  Copyright © 2018 Ryan Elliott. All rights reserved.
 //
 
-#include <tuple>
 #include <cstdio>
-#include <string>
-#include <vector>
-#include <fstream>
-#include <stdio.h>
 #include <fcntl.h>
+#include <fstream>
 #include <iostream>
+#include <stdio.h>
+#include <string>
+#include <tuple>
+#include <vector>
 
 #include "../include/audio_file_merger.hpp"
 #include "../include/utils.hpp"

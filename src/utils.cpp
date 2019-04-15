@@ -6,10 +6,10 @@
 //  Copyright © 2018 Ryan Elliott. All rights reserved.
 //
 
-#include <string>
 #include <fstream>
-#include <stdio.h>
 #include <iostream>
+#include <stdio.h>
+#include <string>
 
 #include "../include/utils.hpp"
 
