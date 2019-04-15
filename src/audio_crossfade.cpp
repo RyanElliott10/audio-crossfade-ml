@@ -8,12 +8,12 @@
 
 #include <bitset>
 #include <cstdio>
-#include <vector>
-#include <thread>
 #include <fstream>
-#include <stdio.h>
 #include <iostream>
+#include <stdio.h>
 #include <string.h>
+#include <thread>
+#include <vector>
 
 #include "../include/wave.hpp"
 #include "../include/utils.hpp"
@@ -40,7 +40,7 @@ void parse_file(const std::string read_file, const std::string write_file,
                 const double start_timestamp, const bool should_output_crossfade,
                 std::vector<Wave> &wave_files)
 {
-  std::cout << "      Handling file " << write_file << std::endl;
+  std::cout << "Handling file " << write_file << std::endl;
   Wave wave_file;
   wave_file.parse_header(read_file.c_str(), write_file.c_str());
   if (!should_output_crossfade) {
@@ -81,7 +81,6 @@ int main(int argc, char *argv[])
   song_one_thread.join();
   song_two_thread.join();
 
-  std::cout << wave_files[0].get_filename() << std::endl;
   AudioFileMerger merger(wave_files[0], wave_files[1], from_timestamp, to_timestamp, crossfade_duration, should_output_crossfade);
   merger.merge_two_files();
   

@@ -7,17 +7,19 @@
 //
 
 #include <cstdio>
+#include <fcntl.h>
+#include <fstream>
+#include <iostream>
+#include <mutex>
+#include <stdio.h>
 #include <string>
 #include <vector>
-#include <fstream>
-#include <stdio.h>
-#include <iostream>
-#include <fcntl.h>
 
 #include "../include/wave.hpp"
 #include "../include/utils.hpp"
 
 #define DATA_CHUNK_NAME "data"
+std::mutex mtx; // mutex for locking threads
 
 Wave::Wave()
 {
@@ -106,7 +108,7 @@ void Wave::write_song_to_file(const char *read_file_name, const char *write_file
   fseek(read_file, start_index, SEEK_SET);
   fseek(write_file, 0, SEEK_END);
 
-  std::cout << "\nWriting to file, skipping the first " << start_timestamp << " seconds..." << std::endl;
+  std::cout << "\nWriting to file, skipping the first " << start_timestamp << " seconds...";
   while ((read_byte = getc(read_file)) != EOF) {
     fprintf(write_file, "%c", read_byte);
     count++;
@@ -116,6 +118,7 @@ void Wave::write_song_to_file(const char *read_file_name, const char *write_file
   if (count != WAVE_HEADER_BYTES) {
     char input;
     const std::string warning = get_yellow_warning();
+    mtx.lock();
     std::cerr << warning << " Unable to write correctly formatted header to file" << std::endl;
     std::cerr << "This may be due to the file's header having more information than a standard .wav file. In this case, you should continue." << std::endl;
     std::cerr << warning << " Index of last written byte: " << count + start_index + this->data_chunk_start_index + 1 << std::endl;
@@ -124,6 +127,7 @@ void Wave::write_song_to_file(const char *read_file_name, const char *write_file
     if (input != 'y') {
       exit(EXIT_FAILURE);
     }
+    mtx.unlock();
   } else {
     std::cout << "Successfully wrote the audio file" << std::endl;
   }
